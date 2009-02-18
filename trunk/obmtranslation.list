@@ -1,0 +1,20 @@
+%product OBM Translation
+%copyright 2008 by Vincent Alquier
+%vendor Vincent Alquier
+%description OBM Translation is a gnome application, written in Ruby, usefull to maintain OBM translations.
+%version 0.5
+%readme README
+%license LICENSE
+%requires ruby
+%requires ruby-gnome2
+
+f 755 root root /usr/bin/obmtranslation obmtranslation.rb
+d 755 root root /usr/lib/ruby/1.8/obmtranslation -
+f 644 root root /usr/lib/ruby/1.8/obmtranslation/config.rb obmtranslation/config.rb
+f 644 root root /usr/lib/ruby/1.8/obmtranslation/core.rb obmtranslation/core.rb
+f 644 root root /usr/lib/ruby/1.8/obmtranslation/gui.rb obmtranslation/gui.rb
+d 755 root root /usr/share/obmtranslation -
+d 755 root root /usr/share/obmtranslation/glade -
+f 644 root root /usr/share/obmtranslation/glade/obmtranslation.glade glade/obmtranslation.glade
+
+

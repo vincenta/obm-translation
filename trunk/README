@@ -1,0 +1,45 @@
+OBM Translation
+~~~~~~~~~~~~~~~
+
+author: Vincent Alquier
+contact: vincent.alquier@obm.org
+Licence: GNU LGPL v3
+Current version: 0.5
+
+================================================================================
+
+OBM Translation is a gnome application, written in Ruby, usefull to maintain OBM translations. This application was written by Vincent Alquier. OBM Translation is free software released under the terms of the GNU Lesser General Public Licence (LGPL) version 3. 
+
+================================================================================
+Important notes
+~~~~~~~~~~~~~~~
+
+Since version 0.5, OBM Translation remember the latest OBM language files directory opened. This information is stored into ~/.obmtranslation. 
+
+Since version 0.4.1, OBM Translation is designed to work by default with current OBM trunk (future OBM 2.2) language files, which are UTF-8 encoded. If you are using OBM Translation with OBM 2.1.X (or under) language files, remember to change the Charset constant in file obmtranslation/config.rb to look like : 
+
+Charset = 'iso-8859-15'
+
+Since version 0.4, you can directly open the file you want to translate with an optional command line argument. As exemple, to edit the calendar.inc file in english, just type the path to this file. 
+
+obmtranslation.rb path/to/obminclude/lang/en/calendar.inc
+
+================================================================================
+Changelogs
+~~~~~~~~~~
+
+0.4.1 to 0.5:
+ * New Graphical User Interface
+ * A Search Field
+ * OBM Translation now remember previously opened OBM language files directory
+
+0.4 to 0.4.1:
+ * Compatibility with the current OBM trunk language files (utf-8 encoded)
+ * licence text (GNU LGPL v3)
+
+0.3 to 0.4:
+ * Saving changes feature implemented
+ * Bug resolved: Variables containing the ';' char can't be parsed
+ * Dialog box to select the obm lang directory
+ * New optional command line argument : path to obm lang directory, or language file
+
