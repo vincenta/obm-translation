@@ -17,7 +17,7 @@ wget http://obm-translation.googlecode.com/files/obmtranslation-0.5.deb
 dpkg -i obmtranslation-0.5.deb
 }}}
 
-Then, you can launch obmtranslation using the obmtranslation command.
+Then, you can launch OBM Translation using the obmtranslation command.
 _e.g. (as normal user) :_
 {{{
 obmtranslation
