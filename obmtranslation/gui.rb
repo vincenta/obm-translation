@@ -141,7 +141,7 @@ module OBMtranslation
       end
 
       def update_title
-        @window.set_title("#{AppName} - #{Config::RefLang} 2 #{@view.lang||''}")
+        @window.set_title("#{AppName} - #{Config::RefLang} 2 #{@view.lang or ''}")
       end
 
     end
@@ -179,6 +179,7 @@ module OBMtranslation
     class View
       attr_reader :lang, :var_list, :view_files, :filter
       attr        :dico, :tree_view
+      ColName, ColRef, ColTrans, ColVar, ColBG, ColFW = (0..5).to_a
 
       def initialize(tree_view, dictionnary)
         @tree_view = tree_view
@@ -190,10 +191,10 @@ module OBMtranslation
         @filtered_list.set_visible_func do |model, iter| 
           if @filter.empty? then
             true
-          elsif @var_list.iter_depth(iter)==0 then
-            true
+          elsif @view_files and @var_list.iter_depth(iter)==0 then
+            @view_files
           else
-            data = (iter[0] or '')+(iter[1] or '')+(iter[2] or '')
+            data = (iter[ColName] or '')+(iter[ColRef] or '')+(iter[ColTrans] or '')
             data.downcase.include?(@filter)
           end
         end
@@ -201,9 +202,9 @@ module OBMtranslation
         renderer_lang1 = CellRendererTranslator.new(8,300)
         renderer_lang2 = CellRendererTranslator.new(8)
         #renderer_lang2.set_editable(true)
-        @col_var = Gtk::TreeViewColumn.new("Variable", renderer_var, :text => 0, :cell_background_gdk => 4, :weight => 5)
-        @col_lang1 = Gtk::TreeViewColumn.new(Config::RefLang, renderer_lang1, :text => 1, :cell_background_gdk => 4).set_resizable(true)
-        @col_lang2 = Gtk::TreeViewColumn.new("Lang", renderer_lang2, :text => 2, :cell_background_gdk => 4).set_resizable(true)
+        @col_var = Gtk::TreeViewColumn.new("Variable", renderer_var, :text => ColName, :cell_background_gdk => ColBG, :weight => ColFW)
+        @col_lang1 = Gtk::TreeViewColumn.new(Config::RefLang, renderer_lang1, :text => ColRef, :cell_background_gdk => ColBG).set_resizable(true)
+        @col_lang2 = Gtk::TreeViewColumn.new("Lang", renderer_lang2, :text => ColTrans, :cell_background_gdk => ColBG).set_resizable(true)
         @tree_view.set_model(@filtered_list)
         @tree_view.append_column(@col_var)
         @tree_view.append_column(@col_lang1)
@@ -251,15 +252,15 @@ module OBMtranslation
       end
 
       def get_row(path)
-        t = var_list.get_iter(path)
-        return t[0], t[1], t[2], t[3], t[4], t[5]
+        iter = var_list.get_iter(path)
+        return iter[ColName], iter[ColRef], iter[ColTrans], iter[ColVar], iter[ColBG], iter[ColFW]
       end
 
       def update_row(path,value)
         t = @var_list.get_iter(path)
-        t[3].value = value
-        t[2] = value
-        t[4] = (value.nil? || value=="") ? Config::RedColor : nil
+        t[ColVar].value = value
+        t[ColTrans] = value
+        t[ColBG] = (value.nil? or value=="") ? Config::RedColor : nil
       end
 
       def get_current_row
@@ -280,12 +281,9 @@ module OBMtranslation
       end
 
       def set_filter(str)
-        if str.nil? or str.empty? then
-          @filter=''
-        else
-          @filter=str.downcase
-        end
+        @filter=(str or '').downcase
         @filtered_list.refilter
+        @tree_view.expand_all
       end
 
     private
@@ -296,24 +294,24 @@ module OBMtranslation
           @dico.ref_lang.files.each { |file_name,file|
             trans_file = @dico.lang[@lang].files[file_name]
             if @view_files then
-              p = @var_list.append(nil)
-              p[0] = file_name
-              p[5] = Pango::WEIGHT_BOLD
+              fiter = @var_list.append(nil)
+              fiter[ColName] = file_name
+              fiter[ColFW] = Pango::WEIGHT_BOLD
             else
-              p = nil
+              fiter = nil
             end
             file.variables.each { |var_name,ref_var|
               if trans_file.variables[var_name].nil? then
                 trans_file.variables[var_name] = OBMtranslation::Variable.new(var_name,ref_var.vartype)
               end
               trans_var = trans_file.variables[var_name]
-              t = @var_list.append(p)
-              t[0] = "#{var_name}"
-              t[1] = "#{ref_var.value}"
-              t[2] = "#{trans_var.value}"
-              t[3] = trans_var
-              t[4] = trans_var.empty? ? Config::RedColor : nil
-              t[5] = Pango::WEIGHT_NORMAL
+              iter = @var_list.append(fiter)
+              iter[ColName]  = "#{var_name}"
+              iter[ColRef]   = "#{ref_var.value}"
+              iter[ColTrans] = "#{trans_var.value}"
+              iter[ColVar]   = trans_var
+              iter[ColBG]    = trans_var.empty? ? Config::RedColor : nil
+              iter[ColFW]    = Pango::WEIGHT_NORMAL
             }
           }
           @filtered_list.refilter
@@ -392,7 +390,7 @@ module OBMtranslation
         super(group,lang,false)
         @lang = lang
         signal_connect('toggled') { |item|
-          MainWindow.instance.set_current_lang(@lang) if item.active? && MainWindow.instance.view.lang!=(@lang)
+          MainWindow.instance.set_current_lang(@lang) if item.active? and MainWindow.instance.view.lang!=(@lang)
         }
       end
 

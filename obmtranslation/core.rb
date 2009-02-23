@@ -92,18 +92,18 @@ module OBMtranslation
 
     def Dictionnary.dictionnary_folder?(path)
       p = File.expand_path(path)
-      File.directory?(p) && File.basename(p)==="lang"
+      File.directory?(p) and File.basename(p)==="lang"
     end
 
     def Dictionnary.lang_folder?(path)
       p = File.expand_path(path)
-      File.directory?(p) && File.basename(File.dirname(p))==="lang"
+      File.directory?(p) and File.basename(File.dirname(p))==="lang"
     end
 
     def Dictionnary.lang_file?(path)
       file = basename(path)
       p = File.dirname(File.expand_path(path))
-      File.file?(p) && File.basename(File.dirname(p))==="lang"
+      File.file?(p) and File.basename(File.dirname(p))==="lang"
     end
 
     def Dictionnary.explode_path(path) # return sample : "/path/to/lang", "fr", "calendar.inc"
@@ -112,7 +112,7 @@ module OBMtranslation
         file = File.basename(p)
         p = File.dirname(p)
       end
-      if File.basename(p)!="lang" && p!="/" then
+      if File.basename(p)!="lang" and p!="/" then
         return File.dirname(p), File.basename(p), file
       else
         return p, nil, nil
@@ -131,7 +131,7 @@ module OBMtranslation
       @lang = { @ref_lang_name => ReferenceLanguage.new(@path,@ref_lang_name) }
       Dir.open(@path) do |dir|
         dir.each do |d|
-          add_lang(d) if File.directory?("#{@path}/#{d}") && d!=@ref_lang_name && !(/^\./=~d)
+          add_lang(d) if File.directory?("#{@path}/#{d}") and d!=@ref_lang_name && !(/^\./=~d)
         end
       end
       notify("on_dictionnary_loaded",self)
@@ -164,7 +164,7 @@ module OBMtranslation
   private
 
     def add_lang(name)
-      if (!(/\//===name) && name!="." && name!=".." && @lang[name].nil?) then
+      if (!(/\//===name) and name!="." && name!=".." && @lang[name].nil?) then
         @lang[name] = Language.new(@path,name,file_list)
       end
     end
@@ -188,7 +188,7 @@ module OBMtranslation
     end
 
     def add_file(name)
-      if (!(/\//===name) && /.*\.inc$/ === name && @files[name].nil?) then
+      if (!(/\//===name) and /.*\.inc$/ === name && @files[name].nil?) then
         @files[name] = LanguageFile.new(name,@path)
       end
     end
@@ -438,7 +438,7 @@ module OBMtranslation
     end
 
     def include?(str)
-      (!@value.nil? && @value.downcase.include?(str))
+      (!@value.nil? and @value.downcase.include?(str))
     end
 
     def multiline?
