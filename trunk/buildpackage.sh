@@ -1,5 +1,5 @@
 #!/bin/bash
-version=0.5
+version=0.5a
 mv -f obmtranslation/config.rb obmtranslation/config.rb.bak
 sed "s/DataDir\ =\ '.*'/DataDir\ =\ '\/usr\/share\/obmtranslation'/" obmtranslation/config.rb.bak > obmtranslation/config.rb
 sudo epm -n -f deb obmtranslation
