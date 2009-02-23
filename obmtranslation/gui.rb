@@ -184,8 +184,19 @@ module OBMtranslation
         @tree_view = tree_view
         @dico = dictionnary
         @view_files = true
-        @filter = nil
+        @filter = ''
         @var_list = Gtk::TreeStore.new(String, String, String, Variable, Gdk::Color, Integer)
+        @filtered_list = Gtk::TreeModelFilter.new(@var_list)
+        @filtered_list.set_visible_func do |model, iter| 
+          if @filter.empty? then
+            true
+          elsif @var_list.iter_depth(iter)==0 then
+            true
+          else
+            data = (iter[0] or '')+(iter[1] or '')+(iter[2] or '')
+            data.downcase.include?(@filter)
+          end
+        end
         renderer_var = CellRendererTranslator.new(8,nil,true)
         renderer_lang1 = CellRendererTranslator.new(8,300)
         renderer_lang2 = CellRendererTranslator.new(8)
@@ -193,7 +204,7 @@ module OBMtranslation
         @col_var = Gtk::TreeViewColumn.new("Variable", renderer_var, :text => 0, :cell_background_gdk => 4, :weight => 5)
         @col_lang1 = Gtk::TreeViewColumn.new(Config::RefLang, renderer_lang1, :text => 1, :cell_background_gdk => 4).set_resizable(true)
         @col_lang2 = Gtk::TreeViewColumn.new("Lang", renderer_lang2, :text => 2, :cell_background_gdk => 4).set_resizable(true)
-        @tree_view.set_model(@var_list)
+        @tree_view.set_model(@filtered_list)
         @tree_view.append_column(@col_var)
         @tree_view.append_column(@col_lang1)
         @tree_view.append_column(@col_lang2)
@@ -269,12 +280,12 @@ module OBMtranslation
       end
 
       def set_filter(str)
-        if str.nil? or str=='' then
-          @filter=nil
+        if str.nil? or str.empty? then
+          @filter=''
         else
           @filter=str.downcase
         end
-        rebuild
+        @filtered_list.refilter
       end
 
     private
@@ -296,17 +307,16 @@ module OBMtranslation
                 trans_file.variables[var_name] = OBMtranslation::Variable.new(var_name,ref_var.vartype)
               end
               trans_var = trans_file.variables[var_name]
-              if @filter.nil? or var_name.downcase.include?(@filter) or ref_var.include?(@filter) or trans_var.include?(@filter) then
-                t = @var_list.append(p)
-                t[0] = "#{var_name}"
-                t[1] = "#{ref_var.value}"
-                t[2] = "#{trans_var.value}"
-                t[3] = trans_var
-                t[4] = trans_var.empty? ? Config::RedColor : nil
-                t[5] = Pango::WEIGHT_NORMAL
-              end
+              t = @var_list.append(p)
+              t[0] = "#{var_name}"
+              t[1] = "#{ref_var.value}"
+              t[2] = "#{trans_var.value}"
+              t[3] = trans_var
+              t[4] = trans_var.empty? ? Config::RedColor : nil
+              t[5] = Pango::WEIGHT_NORMAL
             }
           }
+          @filtered_list.refilter
           @tree_view.expand_all
           #expand_row
           #scroll_to_cell

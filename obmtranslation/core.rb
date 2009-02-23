@@ -26,11 +26,9 @@ require 'observer'
 module OBMtranslation
 
   AppName = 'OBMtranslation'
-  Version = '0.5'
+  Version = '0.5a'
 
-  Special   = 0
-  ShortText = 1
-#  LongText  = 2
+  Special, ShortText, LongText = (0..2).to_a
 
   VarRegExp     = /^(\$[^\s=]+)\s*=\s*(.*)\s*;/m
   IsString      = /^(["'])(([^\\]|\\.)*)\1$/m
