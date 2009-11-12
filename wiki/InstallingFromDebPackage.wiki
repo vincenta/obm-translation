@@ -14,8 +14,8 @@ Download the latest debian package from the [http://code.google.com/p/obm-transl
 _e.g. (as root) :_
 {{{
 cd /tmp/
-wget http://obm-translation.googlecode.com/files/obmtranslation-0.5.deb
-dpkg -i obmtranslation-0.5.deb
+wget http://obm-translation.googlecode.com/files/obmtranslation-0.5a.deb
+dpkg -i obmtranslation-0.5a.deb
 }}}
 
 Then, you can launch OBM Translation using the obmtranslation command.
