@@ -28,6 +28,11 @@ obmtranslation.rb path/to/obminclude/lang/en/calendar.inc
 Changelogs
 ~~~~~~~~~~
 
+0.5 to 0.5.1:
+ * Packaging for all architectures
+ * bugfix: issue #1 (Unable to edit a translation in "file independent" mode)
+ * bugfix: issue #3 (Application crash when destroying then opening the translation dialog)
+
 0.4.1 to 0.5:
  * New Graphical User Interface
  * A Search Field
