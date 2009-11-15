@@ -1,5 +1,5 @@
 #!/bin/bash
-majorversion="0.5a"
+majorversion="0.5.1"
 revision=`svnversion`
 version="$majorversion-$revision"
 builddir="linux-2.6-all"

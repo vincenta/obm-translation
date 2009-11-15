@@ -26,7 +26,7 @@ require 'observer'
 module OBMtranslation
 
   AppName = 'OBMtranslation'
-  Version = '0.5a'
+  Version = '0.5.1'
 
   Special, ShortText, LongText = (0..2).to_a
 
