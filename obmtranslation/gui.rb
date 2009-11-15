@@ -215,16 +215,15 @@ module OBMtranslation
         @tree_view.append_column(@col_lang2)
         @tree_view.expander_column=@col_var
         @tree_view.signal_connect("row-activated") { |view, path, column|
-          iter = @var_list.get_iter(path)
-          if @var_list.iter_depth(iter)==0 then
+          set_current_row(path)
+          variable, ref, trans, *properties = get_current_row
+          if ref.nil? then
             if @tree_view.row_expanded?(path) then
               @tree_view.collapse_row(path)
             else
               @tree_view.expand_row(path,true)
             end
           else
-            set_current_row(path)
-            variable, ref, trans, *properties = get_current_row
             MainWindow.instance.open_editor(@lang, variable, ref, trans)
           end
         }
