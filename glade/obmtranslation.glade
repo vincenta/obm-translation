@@ -209,7 +209,7 @@
     <property name="destroy_with_parent">True</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="urgency_hint">True</property>
-    <property name="deletable">False</property>
+    <property name="deletable">True</property>
     <property name="transient_for">window</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">

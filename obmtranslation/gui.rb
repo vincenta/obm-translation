@@ -115,6 +115,10 @@ module OBMtranslation
         @cancel_button.signal_connect('clicked') { |button|
           @popup.hide
         }
+        @popup.signal_connect('delete_event') {
+          @popup.hide
+          true
+        }
 
         @window = glade['window']
         @window.signal_connect('delete_event') { Main.instance.quit }
